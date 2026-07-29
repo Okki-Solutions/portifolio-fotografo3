@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lucas Rya | Fotografia Premium</title>
+  <!-- Google Fonts: Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome (ícones) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    /* ===== RESET E VARIÁVEIS ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #050505;
+      --foreground: #f5f5f5;
+      --accent: #d97a2e;
+      --accent-glow: rgba(217, 122, 46, 0.3);
+      --glass-bg: rgba(255, 255, 255, 0.04);
+      --glass-border: rgba(255, 255, 255, 0.12);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --font: 'Space Grotesk', sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--foreground);
+      font-family: var(--font);
+      cursor: none;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* ===== SELEÇÃO ===== */
+    ::selection {
+      background: var(--accent);
+      color: #050505;
+    }
+
+    /* ===== GLASS CLASSES ===== */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px) saturate(1.2);
+      -webkit-backdrop-filter: blur(30px) saturate(1.2);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .glass-light {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px) saturate(1.1);
+      -webkit-backdrop-filter: blur(20px) saturate(1.1);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .glass-glow {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass-glow::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: inherit;
+      padding: 1px;
+      background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.1), transparent, rgba(255, 255, 255, 0.05), transparent);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+
+    /* ===== CURSOR PERSONALIZADO ===== */
+    .cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--foreground);
+      mix-blend-mode: difference;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity 0.15s linear, transform 0.08s linear;
+      will-change: transform, opacity;
+      box-shadow: 0 0 6px rgba(255,255,255,0.04);
+    }
+
+    .cursor::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px solid rgba(217,122,46,0.12);
+      transform: scale(1);
+      transition: transform 0.18s ease, opacity 0.18s ease, border-color 0.18s ease;
+      pointer-events: none;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9998;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 122, 46, 0.12), transparent 60%);
+      filter: none;
+      transform: translate(-50%, -50%) scale(1);
+      transition: opacity 0.15s linear, transform 0.12s linear;
+      opacity: 0;
+      will-change: transform, opacity;
+    }
+
+    /* estado ao passar sobre elemento interativo */
+    .cursor-hover .cursor {
+      transform: translate(-50%, -50%) scale(2.6);
+      background: var(--accent);
+      mix-blend-mode: normal;
+    }
+
+    .cursor-hover .cursor::after {
+      transform: scale(1.08);
+      border-color: rgba(217,122,46,0.45);
+      opacity: 0.9;
+    }
+
+    .cursor-hover .cursor-glow {
+      width: 96px;
+      height: 96px;
+      opacity: 0.9;
+    }
+
+    /* feedback de clique/press */
+    .cursor-pressed .cursor {
+      transform: translate(-50%, -50%) scale(0.8) !important;
+      transition: transform 0.08s ease;
+    }
+
+    .cursor-pressed .cursor::after {
+      transform: scale(0.95) !important;
+    }
+
+    /* esconder cursor personalizado em dispositivos touch / coarse */
+    @media (pointer: coarse), (max-width: 768px) {
+      body { cursor: auto; }
+      .cursor, .cursor-glow { display: none !important; }
+    }
+
+    /* reduzir efeitos para preferências de movimento reduzido */
+    @media (prefers-reduced-motion: reduce) {
+      .cursor-glow { display: none !important; }
+      .cursor { transition: none; }
+    }
+
+    /* ===== BACKGROUND EFFECTS ===== */
+    .bg-effects {
+      position: fixed;
+      inset: 0;
+      z-index: -10;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .bg-grad-1 {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 60%;
+      height: 60%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(217, 122, 46, 0.12), transparent 70%);
+      filter: blur(100px);
+      animation: float1 20s ease-in-out infinite alternate;
+    }
+
+    .bg-grad-2 {
+      position: absolute;
+      bottom: -10%;
+      left: -10%;
+      width: 50%;
+      height: 50%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(100, 80, 255, 0.06), transparent 70%);
+      filter: blur(120px);
+      animation: float2 25s ease-in-out infinite alternate;
+    }
+
+    .bg-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      mix-blend-mode: overlay;
+    }
+
+    .bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+    }
+
+    @keyframes float1 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(60px, -40px); }
+    }
+    @keyframes float2 {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-50px, 30px); }
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 50;
+      padding: 1.25rem 1.5rem;
+      transition: all 0.5s ease;
+    }
+
+    .navbar.scrolled {
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px) saturate(1.2);
+      -webkit-backdrop-filter: blur(30px) saturate(1.2);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 0.75rem 1.5rem;
+    }
+
+    .navbar-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: white;
+      text-decoration: none;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: none;
+      align-items: center;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 0.6875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: white;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* Menu hambúrguer */
+    .menu-toggle {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      border-radius: 8px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: white;
+      transition: all 0.3s;
+    }
+
+    .menu-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    .menu-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+    .menu-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 2rem 1.5rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(40px);
+      -webkit-backdrop-filter: blur(40px);
+      border-bottom: 1px solid var(--glass-border);
+      list-style: none;
+    }
+
+    .mobile-menu.open {
+      display: flex;
+    }
+
+    .mobile-menu a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      transition: color 0.3s;
+    }
+
+    .mobile-menu a:hover {
+      color: white;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      position: relative;
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+
+    .hero-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(3px) saturate(0.8) brightness(0.5);
+      transform: scale(1.1);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      padding: 0 1.5rem;
+      max-width: 800px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      color: var(--accent);
+      font-size: 0.625rem;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      font-weight: 300;
+      margin-bottom: 1rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.2s forwards;
+    }
+
+    .hero h1 {
+      font-size: clamp(3rem, 12vw, 7rem);
+      font-weight: 700;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.4s forwards;
+    }
+
+    .hero h1 span {
+      color: var(--accent);
+    }
+
+    .hero p {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: clamp(0.875rem, 1.2vw, 1rem);
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      max-width: 500px;
+      margin: 1rem auto 2.5rem;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.6s forwards;
+    }
+
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 1s ease 0.9s forwards;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 2rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+    }
+
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.15);
+      transform: scale(1.05);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #050505;
+      box-shadow: 0 0 40px rgba(217, 122, 46, 0.2);
+    }
+
+    .btn-accent:hover {
+      background: #c06a20;
+      transform: scale(1.05);
+      box-shadow: 0 0 60px rgba(217, 122, 46, 0.3);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s ease 1.6s forwards;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 2rem;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+      animation: bounceDown 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== SEÇÕES ===== */
+    section {
+      min-height: 100vh;
+      width: 100%;
+      padding: 5rem 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3.5rem;
+    }
+
+    .section-header .badge {
+      color: var(--accent);
+      font-size: 0.625rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      margin-top: 0.5rem;
+      line-height: 1.1;
+    }
+
+    .section-header h2 span {
+      color: var(--accent);
+    }
+
+    .section-header p {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.875rem;
+      margin-top: 0.75rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== SOBRE ===== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .about-image {
+      position: relative;
+      aspect-ratio: 4/5;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .about-image .glass-frame {
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      padding: 0.5rem;
+      overflow: hidden;
+    }
+
+    .about-image .glass-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+
+    .about-image .glow-deco {
+      position: absolute;
+      top: -1rem;
+      right: -1rem;
+      width: 8rem;
+      height: 8rem;
+      background: rgba(217, 122, 46, 0.1);
+      border-radius: 50%;
+      filter: blur(60px);
+    }
+
+    .about-text h2 {
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .about-text h2 span {
+      color: var(--accent);
+    }
+
+    .about-text p {
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 1.5rem;
+      max-width: 500px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+
+    .stat-item {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+    }
+
+    .stat-item .number {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 700;
+      color: white;
+    }
+
+    .stat-item .label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.4);
+      margin-top: 0.25rem;
+    }
+
+    /* ===== GALERIA ===== */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .gallery-item {
+      position: relative;
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: transform 0.5s ease;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s ease;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-item .overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: background 0.5s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-item:hover .overlay {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .gallery-item .overlay span {
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      color: white;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.4s ease;
+    }
+
+    .gallery-item:hover .overlay span {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ===== LIGHTBOX ===== */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90vw;
+      max-height: 85vh;
+      background: var(--glass-bg);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 0.5rem;
+      box-shadow: var(--glass-shadow);
+    }
+
+    .lightbox-content img {
+      display: block;
+      max-width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1.2rem;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .lightbox-nav.prev {
+      left: -1.5rem;
+    }
+    .lightbox-nav.next {
+      right: -1.5rem;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 1rem;
+    }
+
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 255, 255, 0.07);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 0.4rem 1.2rem;
+      border-radius: 20px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+    }
+
+    /* ===== SERVIÇOS ===== */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem 1.5rem;
+      transition: all 0.5s ease;
+      cursor: default;
+    }
+
+    .service-card:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 60px rgba(217, 122, 46, 0.1);
+    }
+
+    .service-card .icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      background: rgba(217, 122, 46, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      font-size: 1.5rem;
+      transition: background 0.3s;
+    }
+
+    .service-card:hover .icon {
+      background: rgba(217, 122, 46, 0.2);
+    }
+
+    .service-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .service-card p {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .service-card .line {
+      width: 2rem;
+      height: 1px;
+      background: rgba(217, 122, 46, 0.3);
+      margin-top: 1rem;
+      transition: width 0.5s;
+    }
+
+    .service-card:hover .line {
+      width: 3rem;
+    }
+
+    /* ===== DEPOIMENTOS ===== */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .testimonial-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1rem;
+      color: var(--accent);
+      font-size: 0.9rem;
+    }
+
+    .testimonial-card blockquote {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      flex: 1;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .testimonial-author img {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .testimonial-author .info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .testimonial-author .name {
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .testimonial-author .role {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    /* ===== CONTATO ===== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .contact-form label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.25rem;
+      display: block;
+    }
+
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      color: white;
+      font-family: var(--font);
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .contact-form input:focus,
+    .contact-form textarea:focus {
+      border-color: rgba(217, 122, 46, 0.5);
+      box-shadow: 0 0 20px rgba(217, 122, 46, 0.05);
+    }
+
+    .contact-form textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .contact-form .btn-submit {
+      padding: 1rem;
+      background: var(--accent);
+      color: #050505;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 0 50px rgba(217, 122, 46, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .contact-form .btn-submit:hover {
+      background: #c06a20;
+      transform: scale(1.01);
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-info .info-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .info-card .item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .info-card .item:last-child {
+      border-bottom: none;
+    }
+
+    .info-card .item i {
+      color: var(--accent);
+      width: 1.25rem;
+      margin-top: 0.1rem;
+    }
+
+    .info-card .item .label {
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .info-card .item .value {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.9rem;
+    }
+
+    .contact-map {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255, 255, 255, 0.15);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      padding: 2.5rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      text-align: center;
+    }
+
+    .footer-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .footer-logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .footer-logo span {
+      color: var(--accent);
+    }
+
+    .footer-socials {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .footer-socials a {
+      color: rgba(255, 255, 255, 0.3);
+      transition: color 0.3s;
+      font-size: 1.1rem;
+    }
+
+    .footer-socials a:hover {
+      color: white;
+    }
+
+    .footer-copy {
+      color: rgba(255, 255, 255, 0.2);
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+    }
+
+    /* ===== RESPONSIVIDADE ===== */
+    @media (min-width: 768px) {
+      .nav-links {
+        display: flex;
+      }
+
+      .menu-toggle {
+        display: none;
+      }
+
+      .mobile-menu {
+        display: none !important;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+      }
+
+      .about-image {
+        max-width: 100%;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .lightbox-nav.prev {
+        left: -2.5rem;
+      }
+      .lightbox-nav.next {
+        right: -2.5rem;
+      }
+    }
+
+    @media (max-width: 767px) {
+      .hero h1 {
+        font-size: 3.5rem;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .lightbox-nav {
+        width: 36px;
+        height: 36px;
+        font-size: 0.9rem;
+      }
+
+      .lightbox-nav.prev {
+        left: 0.5rem;
+      }
+      .lightbox-nav.next {
+        right: 0.5rem;
+      }
+    }
+
+    /* ===== UTILITÁRIOS ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .cursor-hover * {
+      cursor: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- ===== CURSOR ===== -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ===== BACKGROUND EFFECTS ===== -->
+  <div class="bg-effects">
+    <div class="bg-grad-1"></div>
+    <div class="bg-grad-2"></div>
+    <div class="bg-noise"></div>
+    <div class="bg-vignette"></div>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-container">
+      <a href="#" class="logo">RYA<span>.</span></a>
+      <ul class="nav-links">
+        <li><a href="#hero">Início</a></li>
+        <li><a href="#about">Sobre</a></li>
+        <li><a href="#gallery">Galeria</a></li>
+        <li><a href="#services">Serviços</a></li>
+        <li><a href="#testimonials">Depoimentos</a></li>
+        <li><a href="#contact">Contato</a></li>
+      </ul>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <ul class="mobile-menu" id="mobileMenu">
+      <li><a href="#hero">Início</a></li>
+      <li><a href="#about">Sobre</a></li>
+      <li><a href="#gallery">Galeria</a></li>
+      <li><a href="#services">Serviços</a></li>
+      <li><a href="#testimonials">Depoimentos</a></li>
+      <li><a href="#contact">Contato</a></li>
+    </ul>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1920&q=80" alt="Fotografia artística" />
+    </div>
+    <div class="hero-content">
+      <span class="hero-badge">Fotografia Premium</span>
+      <h1>Lucas <span>Rya</span></h1>
+      <p>Capturando a essência do luxo e da emoção em cada frame</p>
+      <div class="hero-buttons">
+        <a href="#gallery" class="btn btn-glass">Ver Portfólio</a>
+        <a href="#contact" class="btn btn-accent">Entrar em Contato</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ===== SOBRE ===== -->
+  <section id="about">
+    <div class="section-container">
+      <div class="about-grid">
+        <div class="about-image reveal">
+          <div class="glass-frame glass">
+            <img src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=800&q=80" alt="Lucas Rya - Fotógrafo" />
+          </div>
+          <div class="glow-deco"></div>
+        </div>
+        <div class="about-text">
+          <div class="reveal">
+            <span class="badge" style="color:var(--accent); font-size:0.625rem; letter-spacing:0.3em; text-transform:uppercase;">Sobre mim</span>
+            <h2>A arte de <br /><span>contar histórias</span></h2>
+          </div>
+          <p class="reveal">Com mais de 8 anos de experiência, minha abordagem combina técnica apurada com sensibilidade artística para criar imagens que transcendem o tempo. Cada clique é uma narrativa visual única.</p>
+          <p class="reveal" style="color:rgba(255,255,255,0.4); font-size:0.875rem; margin-top:0.75rem;">Especializado em moda, lifestyle e casamentos, atuo com uma identidade visual que une o minimalismo japonês à ousadia contemporânea.</p>
+          <div class="about-stats">
+            <div class="stat-item reveal">
+              <div class="number">8+</div>
+              <div class="label">Anos de Experiência</div>
+            </div>
+            <div class="stat-item reveal">
+              <div class="number">120+</div>
+              <div class="label">Clientes Atendidos</div>
+            </div>
+            <div class="stat-item reveal">
+              <div class="number">450+</div>
+              <div class="label">Projetos Realizados</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERIA ===== -->
+  <section id="gallery">
+    <div class="section-container">
+      <div class="section-header reveal">
+        <span class="badge">Portfólio</span>
+        <h2>Galeria <span>Premium</span></h2>
+        <p>Cada imagem é uma obra-prima, cuidadosamente composta para contar sua história</p>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- As imagens serão injetadas via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIGHTBOX ===== -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-content">
+      <img id="lightboxImg" src="" alt="Ampliada" />
+      <button class="lightbox-close" id="lightboxClose"><i class="fas fa-times"></i></button>
+      <button class="lightbox-nav prev" id="lightboxPrev"><i class="fas fa-chevron-left"></i></button>
+      <button class="lightbox-nav next" id="lightboxNext"><i class="fas fa-chevron-right"></i></button>
+      <div class="lightbox-counter" id="lightboxCounter">1 / 6</div>
+    </div>
+  </div>
+
+  <!-- ===== SERVIÇOS ===== -->
+  <section id="services">
+    <div class="section-container">
+      <div class="section-header reveal">
+        <span class="badge">Serviços</span>
+        <h2>O que <span>ofereço</span></h2>
+        <p>Soluções fotográficas personalizadas para cada projeto</p>
+      </div>
+      <div class="services-grid" id="servicesGrid">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== DEPOIMENTOS ===== -->
+  <section id="testimonials">
+    <div class="section-container">
+      <div class="section-header reveal">
+        <span class="badge">Depoimentos</span>
+        <h2>O que <span>dizem</span></h2>
+      </div>
+      <div class="testimonials-grid" id="testimonialsGrid">
+        <!-- Injetado via JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CONTATO ===== -->
+  <section id="contact">
+    <div class="section-container">
+      <div class="section-header reveal">
+        <span class="badge">Contato</span>
+        <h2>Vamos <span>conversar</span></h2>
+        <p>Estou pronto para transformar sua visão em imagens inesquecíveis</p>
+      </div>
+      <div class="contact-grid">
+        <form class="contact-form reveal" id="contactForm">
+          <div>
+            <label for="name">Nome</label>
+            <input type="text" id="name" placeholder="Seu nome" required />
+          </div>
+          <div>
+            <label for="email">E-mail</label>
+            <input type="email" id="email" placeholder="seu@email.com" required />
+          </div>
+          <div>
+            <label for="message">Mensagem</label>
+            <textarea id="message" placeholder="Conte-me sobre seu projeto..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">
+            <i class="fas fa-paper-plane"></i> Enviar
+          </button>
+        </form>
+        <div class="contact-info reveal">
+          <div class="info-card glass">
+            <div class="item">
+              <i class="fas fa-map-pin"></i>
+              <div>
+                <div class="label">Localização</div>
+                <div class="value">São Paulo, Brasil</div>
+              </div>
+            </div>
+            <div class="item">
+              <i class="fas fa-phone"></i>
+              <div>
+                <div class="label">Telefone</div>
+                <div class="value">+55 (11) 99999-9999</div>
+              </div>
+            </div>
+            <div class="item">
+              <i class="fas fa-envelope"></i>
+              <div>
+                <div class="label">E-mail</div>
+                <div class="value">contato@lucasrya.com</div>
+              </div>
+            </div>
+          </div>
+          <div class="contact-map glass">
+            <span><i class="fas fa-map-marked-alt" style="margin-right:0.5rem;"></i> Localização</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-logo">RYA<span>.</span></div>
+      <div class="footer-socials">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="Behance"><i class="fab fa-behance"></i></a>
+        <a href="#" aria-label="E-mail"><i class="fas fa-envelope"></i></a>
+        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+      <div class="footer-copy">&copy; 2026 Lucas Rya. Todos os direitos reservados.</div>
+    </div>
+  </footer>
+
+  <script>
+    // ============================================================
+    // 1. CURSOR PERSONALIZADO SIMPLIFICADO
+    // ============================================================
+    const cursor = document.getElementById('cursor');
+    const cursorGlow = document.getElementById('cursorGlow');
+    let isTouch = false;
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let pos = { x: mouse.x, y: mouse.y };
+    const lerp = (a, b, n) => (1 - n) * a + n * b;
+    let isPressed = false;
+
+    function enableTouch() {
+      isTouch = true;
+      document.body.classList.add('is-touch');
+      cursor.style.display = 'none';
+      cursorGlow.style.display = 'none';
+      document.body.style.cursor = 'auto';
+    }
+
+    if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+      enableTouch();
+    }
+    window.addEventListener('touchstart', enableTouch, { once: true });
+
+    // usar pointermove para maior compatibilidade e performance
+    window.addEventListener('pointermove', (e) => {
+      if (isTouch) return;
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+      cursor.style.opacity = '1';
+      cursorGlow.style.opacity = '1';
+    }, { passive: true });
+
+    window.addEventListener('pointerleave', () => {
+      if (isTouch) return;
+      cursor.style.opacity = '0';
+      cursorGlow.style.opacity = '0';
+    });
+
+    function animateCursor() {
+      // passo de interpolação maior -> cursor mais responsivo
+      pos.x = lerp(pos.x, mouse.x, 0.45);
+      pos.y = lerp(pos.y, mouse.y, 0.45);
+
+      const scale = isPressed ? 0.9 : 1;
+
+      cursor.style.transform = `translate3d(${pos.x - cursor.offsetWidth / 2}px, ${pos.y - cursor.offsetHeight / 2}px, 0) scale(${scale})`;
+      cursorGlow.style.transform = `translate3d(${pos.x - cursorGlow.offsetWidth / 2}px, ${pos.y - cursorGlow.offsetHeight / 2}px, 0) scale(1)`;
+
+      requestAnimationFrame(animateCursor);
+    }
+
+    requestAnimationFrame(animateCursor);
+
+    // alvos de hover (simples)
+    const hoverTargets = document.querySelectorAll('a, button, input, textarea, .gallery-item, .lightbox-nav, .menu-toggle, .btn');
+    hoverTargets.forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+      el.addEventListener('focus', () => document.body.classList.add('cursor-hover'));
+      el.addEventListener('blur', () => document.body.classList.remove('cursor-hover'));
+    });
+
+    // feedback de clique reduzido
+    document.addEventListener('pointerdown', () => { isPressed = true; document.body.classList.add('cursor-pressed'); });
+    document.addEventListener('pointerup', () => { isPressed = false; document.body.classList.remove('cursor-pressed'); });
+
+    // ============================================================
+    // 2. NAVBAR SCROLL + MENU MOBILE
+    // ============================================================
+    const navbar = document.getElementById('navbar');
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 60) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+    });
+
+    // Fechar menu ao clicar em um link
+    document.querySelectorAll('.mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuToggle.classList.remove('open');
+        mobileMenu.classList.remove('open');
+      });
+    });
+
+    // ============================================================
+    // 3. DADOS DA GALERIA
+    // ============================================================
+    const galleryData = [
+      { src: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=1200&q=80', alt: 'Editorial de moda 1' },
+      { src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1200&q=80', alt: 'Retrato artístico' },
+      { src: 'https://images.unsplash.com/photo-1554048612-b6a482bc67e5?w=1200&q=80', alt: 'Lifestyle urbano' },
+      { src: 'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1200&q=80', alt: 'Moda e movimento' },
+      { src: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=1200&q=80', alt: 'Editorial de rua' },
+      { src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80', alt: 'Casamento e emoção' },
+    ];
+
+    const galleryGrid = document.getElementById('galleryGrid');
+    galleryData.forEach((item, index) => {
+      const div = document.createElement('div');
+      div.className = 'gallery-item glass-glow reveal';
+      div.innerHTML = `
+        <img src="${item.src}" alt="${item.alt}" loading="lazy" />
+        <div class="overlay"><span>Ver imagem</span></div>
+      `;
+      div.addEventListener('click', () => openLightbox(index));
+      galleryGrid.appendChild(div);
+    });
+
+    // ============================================================
+    // 4. LIGHTBOX
+    // ============================================================
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+    const lightboxPrev = document.getElementById('lightboxPrev');
+    const lightboxNext = document.getElementById('lightboxNext');
+    const lightboxCounter = document.getElementById('lightboxCounter');
+    let currentIndex = 0;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      updateLightbox();
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function updateLightbox() {
+      const item = galleryData[currentIndex];
+      lightboxImg.src = item.src;
+      lightboxImg.alt = item.alt;
+      lightboxCounter.textContent = `${currentIndex + 1} / ${galleryData.length}`;
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + galleryData.length) % galleryData.length;
+      updateLightbox();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % galleryData.length;
+      updateLightbox();
+    }
+
+    lightboxClose.addEventListener('click', closeLightbox);
+    lightboxPrev.addEventListener('click', prevImage);
+    lightboxNext.addEventListener('click', nextImage);
+
+    // Fechar ao clicar fora da imagem
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Teclado
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') prevImage();
+      if (e.key === 'ArrowRight') nextImage();
+    });
+
+    // ============================================================
+    // 5. SERVIÇOS (dados)
+    // ============================================================
+    const servicesData = [
+      { icon: 'fa-camera', title: 'Fotografia de Moda', desc: 'Ensaios editoriais com direção criativa e identidade visual marcante.' },
+      { icon: 'fa-heart', title: 'Casamentos & Eventos', desc: 'Registro emocional e autêntico do seu dia mais especial.' },
+      { icon: 'fa-users', title: 'Retratos & Lifestyle', desc: 'Retratos naturais que capturam a essência e personalidade.' },
+      { icon: 'fa-star', title: 'Beauty & Glamour', desc: 'Beauty looks com iluminação sofisticada e acabamento premium.' },
+      { icon: 'fa-book-open', title: 'Ensaios Editoriais', desc: 'Produções completas para revistas, marcas e campanhas.' },
+      { icon: 'fa-film', title: 'Cobertura de Eventos', desc: 'Cobertura fotográfica com olhar artístico e narrativo.' },
+    ];
+
+    const servicesGrid = document.getElementById('servicesGrid');
+    servicesData.forEach((service) => {
+      const div = document.createElement('div');
+      div.className = 'service-card reveal';
+      div.innerHTML = `
+        <div class="icon"><i class="fas ${service.icon}"></i></div>
+        <h3>${service.title}</h3>
+        <p>${service.desc}</p>
+        <div class="line"></div>
+      `;
+      servicesGrid.appendChild(div);
+    });
+
+    // ============================================================
+    // 6. DEPOIMENTOS (dados)
+    // ============================================================
+    const testimonialsData = [
+      {
+        name: 'Marina Costa',
+        role: 'Diretora Criativa, Vogue Brasil',
+        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&q=80',
+        text: 'O olhar do Lucas é único. Cada clique parece uma pintura. Profissionalismo e arte em perfeita harmonia.',
+        stars: 5,
+      },
+      {
+        name: 'Rafael Mendes',
+        role: 'CEO, Mendes Branding',
+        avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&q=80',
+        text: 'Transformou nossa campanha de lançamento com imagens que transmitem exatamente a essência da marca. Recomendo sem hesitar.',
+        stars: 5,
+      },
+      {
+        name: 'Beatriz Lins',
+        role: 'Noiva & Influenciadora',
+        avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&q=80',
+        text: 'As fotos do meu casamento são eternas. Lucas capturou cada emoção com uma delicadeza que nos surpreendeu. Perfeito!',
+        stars: 5,
+      },
+    ];
+
+    const testimonialsGrid = document.getElementById('testimonialsGrid');
+    testimonialsData.forEach((item) => {
+      const div = document.createElement('div');
+      div.className = 'testimonial-card reveal';
+      const starsHTML = Array(item.stars).fill('<i class="fas fa-star"></i>').join('');
+      div.innerHTML = `
+        <div class="testimonial-stars">${starsHTML}</div>
+        <blockquote>“${item.text}”</blockquote>
+        <div class="testimonial-author">
+          <img src="${item.avatar}" alt="${item.name}" />
+          <div class="info">
+            <span class="name">${item.name}</span>
+            <span class="role">${item.role}</span>
+          </div>
+        </div>
+      `;
+      testimonialsGrid.appendChild(div);
+    });
+
+    // ============================================================
+    // 7. SCROLL REVEAL (Intersection Observer)
+    // ============================================================
+    const revealElements = document.querySelectorAll('.reveal');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -50px 0px',
+    });
+
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ============================================================
+    // 8. FORMULÁRIO (exemplo)
+    // ============================================================
+    document.getElementById('contactForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Mensagem enviada (simulação). Obrigado pelo contato!');
+      e.target.reset();
+    });
+
+    // ============================================================
+    // 9. PARALLAX SUAVE NO HERO (opcional)
+    // ============================================================
+    window.addEventListener('scroll', () => {
+      const heroBg = document.querySelector('.hero-bg img');
+      if (heroBg) {
+        const scrollY = window.scrollY;
+        heroBg.style.transform = `scale(1.1) translateY(${scrollY * 0.08}px)`;
+      }
+    });
+
+    console.log('🚀 Portfólio Lucas Rya carregado com sucesso!');
+  </script>
+</body>
+</html>
