@@ -10,8 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <!-- Font Awesome (ícones) -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <!-- n8n Chat styles -->
-  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
   <style>
     /* ===== RESET E VARIÁVEIS ===== */
     * {
@@ -29,6 +27,25 @@
       --glass-border: rgba(255, 255, 255, 0.12);
       --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
       --font: 'Space Grotesk', sans-serif;
+      /* variáveis de tema para n8n Chat */
+      --chat--color-primary: #ff7a1a;
+      --chat--color-primary-shade-50: #f26a08;
+      --chat--color-primary-shade-100: #d95f07;
+      --chat--toggle--background: #ff7a1a;
+      --chat--toggle--hover--background: #f26a08;
+      --chat--toggle--color: #ffffff;
+      --chat--window--width: 380px;
+      --chat--window--height: 600px;
+      --chat--header--background: #0f0f0f;
+      --chat--header--color: #ffffff;
+      --chat--body--background: #141414;
+      --chat--message--bot--background: #232323;
+      --chat--message--bot--color: #ffffff;
+      --chat--message--user--background: #ff7a1a;
+      --chat--message--user--color: #ffffff;
+      --chat--input--background: #1c1c1c;
+      --chat--input--text-color: #ffffff;
+      --chat--input--placeholder--color: #888888;
     }
 
     html {
@@ -1767,31 +1784,6 @@
     console.log('🚀 Portfólio Lucas Rya carregado com sucesso!');
   </script>
 
-  <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-    // Inicializa chat embutido no container #n8n-chat
-    try {
-      createChat({
-        webhookUrl: 'https://miguelpellatiero.app.n8n.cloud/webhook/6a042c2c-acdc-4c90-9df6-ab4e2f6c5764/chat',
-        mode: 'fullscreen',
-        target: '#n8n-chat',
-        showWelcomeScreen: false,
-        initialMessages: ['Olá! 👋 Sou o assistente virtual do estúdio. Em que posso ajudar?'],
-        i18n: {
-          en: {
-            title: 'Estúdio Fotográfico',
-            subtitle: 'Tire suas dúvidas sobre ensaios e pacotes.',
-            inputPlaceholder: 'Digite sua mensagem...',
-            getStarted: 'Nova conversa',
-            footer: '',
-            closeButtonTooltip: 'Fechar'
-          }
-        }
-      });
-    } catch (err) {
-      console.warn('Falha ao inicializar o chat n8n:', err);
-    }
-  </script>
+  <script type="module" src="/chat.js"></script>
 </body>
 </html>
